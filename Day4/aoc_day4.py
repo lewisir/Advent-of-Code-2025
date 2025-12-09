@@ -6,7 +6,7 @@ https://adventofcode.com/2025/day/4
 
 from time import perf_counter
 
-TEST = False
+TEST = True
 
 DAY = "4"
 REAL_INPUT = "Advent-of-Code-2025/Day" + DAY + "/input_day" + DAY + ".txt"
@@ -81,6 +81,12 @@ def get_adjacent_positions(start_position, map_max_y, map_max_x):
         if new_y >= 0 and new_y < map_max_y and new_x >= 0 and new_x < map_max_x:
             adjacent_positions.append((new_y, new_x))
     return adjacent_positions
+
+
+def display_map(paper_map):
+    """Display the map"""
+    for row in paper_map:
+        print("".join(row))
 
 
 def process_data(data):
