@@ -34,7 +34,7 @@ def main():
         get_sub_graph_members(adjacency_data), key=len, reverse=True
     )
     print(
-        f"Junciton Box Size Multiplication Part I {multiply_sub_graph_sizes(sorted_sub_graphs[:3])}"
+        f"Junciton Box Size Multiplication {multiply_sub_graph_sizes(sorted_sub_graphs[:3])}"
     )
 
 
@@ -54,7 +54,6 @@ def get_sub_graph_members(adjacency_data):
         if node in all_nodes:
             sub_graphs.append(dfs(adjacency_data, node))
             all_nodes.difference_update(sub_graphs[-1])
-            print(f"all_nodes size {len(all_nodes)}")
     return sub_graphs
 
 
