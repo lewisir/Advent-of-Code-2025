@@ -25,17 +25,53 @@ else:
 def main():
     """Main program"""
     data = get_input_data(FILENAME)
+    total_nodes = len(data)
     junction_box_locations = process_data(data)
     junction_box_locations.sort()
-    distance_data = get_distance_data(junction_box_locations)[:CONNECTION_LIMIT]
+    total_distance_data = get_distance_data(junction_box_locations)
+    distance_data = total_distance_data[:CONNECTION_LIMIT]
     connection_data = [x[0] for x in distance_data]
     adjacency_data = get_adjacency_data(connection_data)
     sorted_sub_graphs = sorted(
         get_sub_graph_members(adjacency_data), key=len, reverse=True
     )
     print(
-        f"Junciton Box Size Multiplication {multiply_sub_graph_sizes(sorted_sub_graphs[:3])}"
+        f"Junction Box Size Multiplication Part I {multiply_sub_graph_sizes(sorted_sub_graphs[:3])}"
     )
+    total_connection_data = [x[0] for x in total_distance_data]
+    last_edge = fully_connect_nodes(
+        total_connection_data,
+        total_nodes,
+        find_min_edges_required(total_connection_data, total_nodes),
+    )
+    print(f"X coord product Part II {x_coord_product(last_edge)}")
+
+
+def x_coord_product(edge):
+    """Return the product of the x coordinates"""
+    return edge[0][0] * edge[1][0]
+
+
+def fully_connect_nodes(total_connection_data, total_nodes, i):
+    """Connect nodes until all nodes are connected returning the last edge that completes the connection"""
+    adjacency_data = get_adjacency_data(total_connection_data[:i])
+    connected = len(dfs(adjacency_data, list(adjacency_data.keys())[0]))
+    while connected < total_nodes:
+        i += 1
+        adjacency_data = get_adjacency_data(total_connection_data[:i])
+        connected = len(dfs(adjacency_data, list(adjacency_data.keys())[0]))
+    return total_connection_data[i - 1]
+
+
+def find_min_edges_required(total_connection_data, total_nodes):
+    """Return the index value for the first edge in the connection data that might allow the graph to be complete"""
+    nodes = set()
+    for i, edge in enumerate(total_connection_data):
+        nodes.add(edge[0])
+        nodes.add(edge[1])
+        if len(nodes) == total_nodes:
+            return i
+    return None
 
 
 def multiply_sub_graph_sizes(graph_list):
